@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+   public function up()
+{
+    Schema::create('teacher_salaries', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('teacher_id');
+        $table->decimal('amount', 10, 2);
+        $table->string('month');
+        $table->year('year');
+        $table->date('payment_date');
+        $table->unsignedBigInteger('recorded_by')->nullable();
+        $table->timestamps();
+
+        $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
+        $table->foreign('recorded_by')->references('id')->on('users')->onDelete('set null');
+    });
+}
+
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('teacher_salaries');
+    }
+};

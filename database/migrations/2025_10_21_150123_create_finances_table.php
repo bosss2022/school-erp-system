@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+{
+    Schema::create('finances', function (Blueprint $table) {
+        $table->id();
+        $table->string('type'); // income | expense
+        $table->string('category')->nullable(); // e.g. "Tuition", "Salary", "Maintenance"
+        $table->decimal('amount', 10, 2);
+        $table->text('description')->nullable();
+        $table->unsignedBigInteger('recorded_by')->nullable(); // user_id
+        $table->timestamps();
+
+        $table->foreign('recorded_by')->references('id')->on('users')->onDelete('set null');
+    });
+}
+
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('finances');
+    }
+};
